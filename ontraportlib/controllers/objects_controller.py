@@ -11,6 +11,8 @@ from ..api_helper import APIHelper
 from ..configuration import Configuration
 from ..models.response import Response
 from ..exceptions.api_exception import APIException
+from ..models.format_enum import FormatEnum
+
 
 class ObjectsController(BaseController):
 
@@ -212,10 +214,7 @@ class ObjectsController(BaseController):
         return APIHelper.json_deserialize(_context.response.raw_body, Response.from_dictionary)
 
     def update_objects(self,
-                       email,
-                       firstname,
                        id,
-                       lastname,
                        object_id):
         """Does a PUT request to /objects.
 
@@ -226,10 +225,7 @@ class ObjectsController(BaseController):
         will be ignored.
 
         Args:
-            email (string): New email address for the Object.
-            firstname (string): New first name for the Object.
             id (int): ID of Object.
-            lastname (string): New last name for the Object.
             object_id (int): Object Type ID.
 
         Returns:
@@ -255,10 +251,7 @@ class ObjectsController(BaseController):
 
         # Prepare form parameters
         _form_parameters = {
-            'email': email,
-            'firstname': firstname,
             'id': id,
-            'lastname': lastname,
             'objectID': object_id
         }
         _form_parameters = APIHelper.form_encode_parameters(_form_parameters)
@@ -276,9 +269,6 @@ class ObjectsController(BaseController):
         return APIHelper.json_deserialize(_context.response.raw_body, Response.from_dictionary)
 
     def create_object(self,
-                      email,
-                      firstname,
-                      lastname,
                       object_id):
         """Does a POST request to /objects.
 
@@ -289,9 +279,6 @@ class ObjectsController(BaseController):
         invalid parameters will be ignored.
 
         Args:
-            email (string): New email address for the Object.
-            firstname (string): New first name for the Object.
-            lastname (string): New last name for the Object.
             object_id (int): Object Type ID.
 
         Returns:
@@ -317,9 +304,6 @@ class ObjectsController(BaseController):
 
         # Prepare form parameters
         _form_parameters = {
-            'email': email,
-            'firstname': firstname,
-            'lastname': lastname,
             'objectID': object_id
         }
         _form_parameters = APIHelper.form_encode_parameters(_form_parameters)
@@ -499,8 +483,8 @@ class ObjectsController(BaseController):
         return APIHelper.json_deserialize(_context.response.raw_body, Response.from_dictionary)
 
     def get_meta(self,
-                 format,
-                 object_id):
+                 object_id,
+                 format=FormatEnum.BYID):
         """Does a GET request to /objects/meta.
 
         This will get a list of existing Object types and their corresponding
@@ -511,6 +495,9 @@ class ObjectsController(BaseController):
             format (FormatEnum): Choose to get the list indexed by Object
                 class name or integer ID.
             object_id (int): Object Type ID.
+        Kwargs:
+            format (FormatEnum): Choose to get the list indexed by Object
+                class name or integer ID. Default `FormatEnum.BYID`.
 
         Returns:
             Response: Response from the API. Successful object query
@@ -546,9 +533,6 @@ class ObjectsController(BaseController):
         return APIHelper.json_deserialize(_context.response.raw_body, Response.from_dictionary)
 
     def create_saveorupdate_object(self,
-                                   email,
-                                   firstname,
-                                   lastname,
                                    object_id):
         """Does a POST request to /objects/saveorupdate.
 
@@ -560,9 +544,6 @@ class ObjectsController(BaseController):
         all invalid parameters will be ignored.
 
         Args:
-            email (string): Email address for the Object.
-            firstname (string): First name for the Object.
-            lastname (string): Last name for the Object.
             object_id (int): Object Type ID.
 
         Returns:
@@ -588,9 +569,6 @@ class ObjectsController(BaseController):
 
         # Prepare form parameters
         _form_parameters = {
-            'email': email,
-            'firstname': firstname,
-            'lastname': lastname,
             'objectID': object_id
         }
         _form_parameters = APIHelper.form_encode_parameters(_form_parameters)
