@@ -215,7 +215,8 @@ class ObjectsController(BaseController):
 
     def update_objects(self,
                        id,
-                       object_id):
+                       object_id,
+                       data=None):
         """Does a PUT request to /objects.
 
         This will update an Object's data. The Object type and ID and required
@@ -227,6 +228,7 @@ class ObjectsController(BaseController):
         Args:
             id (int): ID of Object.
             object_id (int): Object Type ID.
+            data (dict): Optional, attributes of object to be updated.
 
         Returns:
             Response: Response from the API. Successfully updated object
@@ -238,6 +240,8 @@ class ObjectsController(BaseController):
                 the request.
 
         """
+        if data is None:
+            data = {}
 
         # Prepare query URL
         _query_builder = Configuration.base_uri
@@ -254,6 +258,7 @@ class ObjectsController(BaseController):
             'id': id,
             'objectID': object_id
         }
+        _form_parameters.update(data)
         _form_parameters = APIHelper.form_encode_parameters(_form_parameters)
 
         # Prepare and execute request
@@ -269,8 +274,9 @@ class ObjectsController(BaseController):
         return APIHelper.json_deserialize(_context.response.raw_body, Response.from_dictionary)
 
     def create_object(self,
-                      object_id):
-        """Does a POST request to /objects.
+                      object_id,
+                      data=None):
+        """Does a POST request to /object.
 
         This will create an Object with the given data. Object type is a
         required parameters, but other parameters are optional and dependent
@@ -280,6 +286,7 @@ class ObjectsController(BaseController):
 
         Args:
             object_id (int): Object Type ID.
+            data (dict): Data for object.
 
         Returns:
             Response: Response from the API. Successful object query
@@ -291,10 +298,12 @@ class ObjectsController(BaseController):
                 the request.
 
         """
+        if data is None:
+            data = {}
 
         # Prepare query URL
         _query_builder = Configuration.base_uri
-        _query_builder += '/objects'
+        _query_builder += '/object'
         _query_url = APIHelper.clean_url(_query_builder)
 
         # Prepare headers
@@ -306,6 +315,7 @@ class ObjectsController(BaseController):
         _form_parameters = {
             'objectID': object_id
         }
+        _form_parameters.update(data)
         _form_parameters = APIHelper.form_encode_parameters(_form_parameters)
 
         # Prepare and execute request
@@ -533,7 +543,8 @@ class ObjectsController(BaseController):
         return APIHelper.json_deserialize(_context.response.raw_body, Response.from_dictionary)
 
     def create_saveorupdate_object(self,
-                                   object_id):
+                                   object_id,
+                                   data=None):
         """Does a POST request to /objects/saveorupdate.
 
         This will create an Object with the given data or will merge with an
@@ -545,6 +556,7 @@ class ObjectsController(BaseController):
 
         Args:
             object_id (int): Object Type ID.
+            data (dict): Data for object.
 
         Returns:
             Response: Response from the API. Successful object query
@@ -556,6 +568,8 @@ class ObjectsController(BaseController):
                 the request.
 
         """
+        if data is None:
+            data = {}
 
         # Prepare query URL
         _query_builder = Configuration.base_uri
@@ -571,6 +585,7 @@ class ObjectsController(BaseController):
         _form_parameters = {
             'objectID': object_id
         }
+        _form_parameters.update(data)
         _form_parameters = APIHelper.form_encode_parameters(_form_parameters)
 
         # Prepare and execute request
