@@ -303,7 +303,7 @@ class ObjectsController(BaseController):
 
         # Prepare query URL
         _query_builder = Configuration.base_uri
-        _query_builder += '/object'
+        _query_builder += '/objects'
         _query_url = APIHelper.clean_url(_query_builder)
 
         # Prepare headers
