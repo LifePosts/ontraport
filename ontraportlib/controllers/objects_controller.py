@@ -17,7 +17,6 @@ from ..models.format_enum import FormatEnum
 class ObjectsController(BaseController):
 
     """A Controller to access Endpoints in the ontraportlib API."""
-    
 
     def get_object(self,
                    id,
@@ -57,13 +56,7 @@ class ObjectsController(BaseController):
 
         # Prepare and execute request
         _request = self.http_client.get(_query_url, headers=_headers, query_parameters=_query_parameters)
-        _context = self.execute_request(_request)        
-
-        # Endpoint and global error handling using HTTP status codes.
-        if _context.response.status_code == 400:
-            raise APIException('Invalid objectID', _context)
-        elif _context.response.status_code == 404:
-            raise APIException('Object not found', _context)
+        _context = self.execute_request(_request)
         self.validate_response(_context)    
 
         # Return appropriate type
@@ -107,38 +100,24 @@ class ObjectsController(BaseController):
 
         # Prepare and execute request
         _request = self.http_client.delete(_query_url, headers=_headers, query_parameters=_query_parameters)
-        _context = self.execute_request(_request)        
-
-        # Endpoint and global error handling using HTTP status codes.
-        if _context.response.status_code == 400:
-            raise APIException('Invalid objectID', _context)
-        elif _context.response.status_code == 404:
-            raise APIException('Object not found', _context)
+        _context = self.execute_request(_request)
         self.validate_response(_context)    
 
         # Return appropriate type
         return APIHelper.json_deserialize(_context.response.raw_body, Response.from_dictionary)
 
     def get_objects(self,
-                    condition,
-                    date_range,
-                    externs,
-                    group_ids,
-                    ids,
-                    list_fields,
                     object_id,
-                    perform_all,
-                    range,
-                    search,
-                    search_notes,
-                    sort,
-                    sort_dir,
-                    start):
+                    **kwargs):
         """Does a GET request to /objects.
 
         TODO: type endpoint description here.
 
         Args:
+            object_id (int): Object Type ID.
+
+        Kwargs:
+            May Include..
             condition (string): Apply this condition to the collection query.
                 This is essentially like a SQL WHERE clause, e.g.
                 firstname='Ben'
@@ -150,17 +129,17 @@ class ObjectsController(BaseController):
             group_ids (list of int): Array of Group ID for Object type as
                 comma-delimited list
             ids (list of int): Array of Object IDs as comma-delimited list.
-            list_fields (list of string): Array of fields to return in
+            listFields (list of string): Array of fields to return in
                 response as comma-delimited list.
-            object_id (int): Object Type ID.
-            perform_all (bool): Perform request on all Objects that match
+
+            performAll (bool): Perform request on all Objects that match
                 criteria.
             range (int): Number of results to return (maximum=50)
             search (string): Search Objects for this string
-            search_notes (bool): Boolean flag to additionally search Object
+            searchNotes (bool): Boolean flag to additionally search Object
                 Notes for the Search term given in Search parameter
             sort (string): Field used to sort results
-            sort_dir (SortDirEnum): Sort direction, must be used in
+            sortDir (SortDirEnum): Sort direction, must be used in
                 conjunction with <b>sort</b> parameter.
             start (int): Return results starting at this offset
 
@@ -180,21 +159,9 @@ class ObjectsController(BaseController):
         _query_builder += '/objects'
         _query_url = APIHelper.clean_url(_query_builder)
         _query_parameters = {
-            'condition': condition,
-            'date_range': date_range,
-            'externs': externs,
-            'group_ids': group_ids,
-            'ids': ids,
-            'listFields': list_fields,
             'objectID': object_id,
-            'performAll': perform_all,
-            'range': range,
-            'search': search,
-            'searchNotes': search_notes,
-            'sort': sort,
-            'sortDir': sort_dir,
-            'start': start
         }
+        _query_parameters.update(kwargs)
 
         # Prepare headers
         _headers = {
@@ -203,11 +170,7 @@ class ObjectsController(BaseController):
 
         # Prepare and execute request
         _request = self.http_client.get(_query_url, headers=_headers, query_parameters=_query_parameters)
-        _context = self.execute_request(_request)        
-
-        # Endpoint and global error handling using HTTP status codes.
-        if _context.response.status_code == 400:
-            raise APIException('Invalid objectID', _context)
+        _context = self.execute_request(_request)
         self.validate_response(_context)    
 
         # Return appropriate type
@@ -320,36 +283,26 @@ class ObjectsController(BaseController):
 
         # Prepare and execute request
         _request = self.http_client.post(_query_url, headers=_headers, parameters=_form_parameters)
-        _context = self.execute_request(_request)        
-
-        # Endpoint and global error handling using HTTP status codes.
-        if _context.response.status_code == 400:
-            raise APIException('Invalid objectID', _context)
+        _context = self.execute_request(_request)
         self.validate_response(_context)    
 
         # Return appropriate type
         return APIHelper.json_deserialize(_context.response.raw_body, Response.from_dictionary)
 
     def delete_objects(self,
-                       condition,
-                       date_range,
-                       externs,
-                       group_ids,
-                       ids,
-                       list_fields,
                        object_id,
-                       perform_all,
-                       range,
-                       search,
-                       search_notes,
-                       sort,
-                       sort_dir,
-                       start):
+                       ids,
+                       **kwargs):
         """Does a DELETE request to /objects.
 
         TODO: type endpoint description here.
 
         Args:
+            object_id (int): Object Type ID.
+            ids (list of int): Array of Object IDs as comma-delimited list.
+
+        Kwargs:
+            May include..
             condition (string): Apply this condition to the collection query.
                 This is essentially like a SQL WHERE clause, e.g.
                 firstname='Ben'
@@ -360,18 +313,16 @@ class ObjectsController(BaseController):
             externs (string): External fields to include in results
             group_ids (list of int): Array of Group ID for Object type as
                 comma-delimited list
-            ids (list of int): Array of Object IDs as comma-delimited list.
-            list_fields (list of string): Array of fields to return in
+            listFields (list of string): Array of fields to return in
                 response as comma-delimited list.
-            object_id (int): Object Type ID.
-            perform_all (bool): Perform request on all Objects that match
+            performAll (bool): Perform request on all Objects that match
                 criteria.
             range (int): Number of results to return (maximum=50)
             search (string): Search Objects for this string
-            search_notes (bool): Boolean flag to additionally search Object
+            searchNotes (bool): Boolean flag to additionally search Object
                 Notes for the Search term given in Search parameter
             sort (string): Field used to sort results
-            sort_dir (SortDirEnum): Sort direction, must be used in
+            sortDir (SortDirEnum): Sort direction, must be used in
                 conjunction with <b>sort</b> parameter.
             start (int): Return results starting at this offset
 
@@ -391,21 +342,10 @@ class ObjectsController(BaseController):
         _query_builder += '/objects'
         _query_url = APIHelper.clean_url(_query_builder)
         _query_parameters = {
-            'condition': condition,
-            'date_range': date_range,
-            'externs': externs,
-            'group_ids': group_ids,
-            'ids': ids,
-            'listFields': list_fields,
             'objectID': object_id,
-            'performAll': perform_all,
-            'range': range,
-            'search': search,
-            'searchNotes': search_notes,
-            'sort': sort,
-            'sortDir': sort_dir,
-            'start': start
+            'ids': ids,
         }
+        _query_parameters.update(kwargs)
 
         # Prepare headers
         _headers = {
@@ -414,11 +354,7 @@ class ObjectsController(BaseController):
 
         # Prepare and execute request
         _request = self.http_client.delete(_query_url, headers=_headers, query_parameters=_query_parameters)
-        _context = self.execute_request(_request)        
-
-        # Endpoint and global error handling using HTTP status codes.
-        if _context.response.status_code == 400:
-            raise APIException('Invalid objectID', _context)
+        _context = self.execute_request(_request)
         self.validate_response(_context)    
 
         # Return appropriate type
@@ -482,11 +418,7 @@ class ObjectsController(BaseController):
 
         # Prepare and execute request
         _request = self.http_client.get(_query_url, headers=_headers, query_parameters=_query_parameters)
-        _context = self.execute_request(_request)        
-
-        # Endpoint and global error handling using HTTP status codes.
-        if _context.response.status_code == 400:
-            raise APIException('Invalid objectID', _context)
+        _context = self.execute_request(_request)
         self.validate_response(_context)    
 
         # Return appropriate type
@@ -590,11 +522,7 @@ class ObjectsController(BaseController):
 
         # Prepare and execute request
         _request = self.http_client.post(_query_url, headers=_headers, parameters=_form_parameters)
-        _context = self.execute_request(_request)        
-
-        # Endpoint and global error handling using HTTP status codes.
-        if _context.response.status_code == 400:
-            raise APIException('Invalid objectID', _context)
+        _context = self.execute_request(_request)
         self.validate_response(_context)    
 
         # Return appropriate type

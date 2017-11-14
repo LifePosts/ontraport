@@ -10,6 +10,7 @@ from decouple import config
 from ..api_helper import APIHelper
 from ..http.http_context import HttpContext
 from ..http.requests_client import RequestsClient
+from ..exceptions.api_exception import APIException
 
 
 class BaseController(object):
@@ -93,5 +94,5 @@ class BaseController(object):
             context (HttpContext): The HttpContext of the API call.            
             
         """
-        if (context.response.status_code < 200) or (context.response.status_code > 208): #[200,208] = HTTP OK
-            raise APIException('HTTP response not OK.', context)
+        if (context.response.status_code < 200) or (context.response.status_code > 208):  # [200,208] = HTTP OK
+            raise APIException('HTTP response not OK: {}'.format(context.response.raw_body), context)
