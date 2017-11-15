@@ -291,18 +291,17 @@ class ObjectsController(BaseController):
 
     def delete_objects(self,
                        object_id,
-                       ids,
                        **kwargs):
         """Does a DELETE request to /objects.
 
-        TODO: type endpoint description here.
+        This endpoint deletes a collection of objects. Use caution with this endpoint.
 
         Args:
             object_id (int): Object Type ID.
-            ids (list of int): Array of Object IDs as comma-delimited list.
 
         Kwargs:
             May include..
+            ids (list of int): Array of Object IDs as comma-delimited list.
             condition (string): Apply this condition to the collection query.
                 This is essentially like a SQL WHERE clause, e.g.
                 firstname='Ben'
@@ -343,7 +342,6 @@ class ObjectsController(BaseController):
         _query_url = APIHelper.clean_url(_query_builder)
         _query_parameters = {
             'objectID': object_id,
-            'ids': ids,
         }
         _query_parameters.update(kwargs)
 
